@@ -3,6 +3,7 @@
 var app = {
     API_BASE_URL: 'http://www.nhtsa.gov/webapi/api/SafetyRatings/',
     API_BASE_PARAMS: 'format=json',
+    API_JSONP_CALLBACK: 'callback',
     selectedManufacturer: '',
 
     initialize: function() {
@@ -16,7 +17,7 @@ var app = {
             error: function(xhr, status, errorMsg) {
                 app.showGeneralError('Failed to load model year data!');
             },
-            jsonp: 'callback',
+            jsonp: app.API_JSONP_CALLBACK,
             method: 'GET',
             success: app.onModelYearsLoaded,
             url: app.API_BASE_URL + '?' + app.API_BASE_PARAMS
@@ -29,7 +30,7 @@ var app = {
             htmlStr = '' 
                 + '<div class="row">'
                 + '    <div class="col-md-12">'
-                + '        <h2>Select a Model Year</h2>'
+                + '        <h3>Select Model Year</h3>'
                 + '        <ul class="list-group" id="modelYears">';
 
         if (data && data.Results) {
@@ -58,7 +59,7 @@ var app = {
             error: function(xhr, status, errorMsg) {
                 app.showGeneralError('Failed to load manufacturers for model year ' + modelYear + '!');
             },
-            jsonp: 'callback',
+            jsonp: app.API_JSONP_CALLBACK,
             method: 'GET',
             success: app.onManufacturersLoaded,
             url: app.API_BASE_URL + '/modelyear/' + modelYear + '?' + app.API_BASE_PARAMS
@@ -73,12 +74,14 @@ var app = {
 
 
         if (data && data.Results) {
+            $('#navButtons').show();
+
             modelYear = data.Results[0].ModelYear;
 
             htmlStr += ''
                 + '<div class="row">'
                 + '    <div class="col-md-12">'
-                + '        <h2>Model Year ' + modelYear + ': Select a Manufacturer</h2>'
+                + '        <h3>' + modelYear + '</h3>'
                 + '        <ul class="list-group" id="manufacturers">';
 
             for (; n < data.Results.length; n++) {
@@ -105,7 +108,7 @@ var app = {
             error: function(xhr, status, errorMsg) {
                 app.showGeneralError('Failed to load vehicle models for manufacturer ' + manufacturer + '!');
             },
-            jsonp: 'callback',
+            jsonp: app.API_JSONP_CALLBACK,
             method: 'GET',
             success: app.onModelsLoaded,
             url: app.API_BASE_URL + 'modelyear/' + modelYear + '/make/' + manufacturer + '?' + app.API_BASE_PARAMS
@@ -125,7 +128,7 @@ var app = {
             htmlStr += ''
                 + '<div class="row">'
                 + '    <div class="col-md-12">'
-                + '        <h2>' + manufacturer + ', Model Year ' + modelYear + ': Select a Vehicle</h2>'
+                + '        <h3>' + modelYear + ' ' + manufacturer + '</h3>'
                 + '        <ul class="list-group" id="vehicles">';
 
             for (; n < data.Results.length; n++) {
@@ -150,9 +153,9 @@ var app = {
             cache: false,
             dataType: 'jsonp',
             error: function(xhr, status, errorMsg) {
-                app.showGeneralError('Failed to vehicle ' + vehicle + '!');
+                app.showGeneralError('Failed to load vehicle ' + vehicle + '!');
             },
-            jsonp: 'callback',
+            jsonp: app.API_JSONP_CALLBACK,
             method: 'GET',
             success: app.onVehicleLoaded,
             url: app.API_BASE_URL + 'modelyear/' + modelYear + '/make/' + manufacturer + '/model/' + vehicle + '?' + app.API_BASE_PARAMS
@@ -160,7 +163,148 @@ var app = {
     },
 
     onVehicleLoaded: function(data, status) {
-        // TODO
+        var vehicleId = '';
+
+        // Nothing to display yet as we have to use VehicleId from data
+        // to get details...
+
+        if (data && data.Results) {
+            vehicleId = data.Results[0].VehicleId;
+
+            $.ajax({
+                cache: false,
+                dataType: 'jsonp',
+                error: function(xhr, status, errorMsg) {
+                    app.showGeneralError('Failed to load vehicle details for ' + data.Results[0].VehicleDescription);
+                },
+                jsonp: app.API_JSONP_CALLBACK,
+                method: 'GET',
+                success: app.onVehicleDetailLoaded,
+                url: app.API_BASE_URL + 'VehicleId/' + vehicleId + '?' + app.API_BASE_PARAMS 
+            });
+        }
+    },
+
+    onVehicleDetailLoaded: function(data, status) {
+        var vehicleDetails = undefined,
+            numRecalls = 0,
+            htmlStr = '';
+
+        if (data && data.Results && data.Results.length === 1) {
+            vehicleDetails = data.Results[0];
+
+            htmlStr += '<div class="row">';
+            htmlStr += '  <div class="col-md-12">';
+            htmlStr += '    <h3>' + vehicleDetails.ModelYear + ' ' + vehicleDetails.Make + ' ' + vehicleDetails.Model + '</h3>';
+            htmlStr += '  </div>';
+            htmlStr += '</div>';
+
+            if (vehicleDetails.VehiclePicture) {
+                htmlStr += '<div class="row">';
+                htmlStr += '  <div class="col-md-12">';
+                htmlStr += '    <img alt="Car Image" class="img-responsive" src="' + vehicleDetails.VehiclePicture + '">';
+                htmlStr += '  </div>';
+                htmlStr += '</div>';
+            }
+
+            htmlStr += '<br/>';
+
+            // Star Ratings
+
+            htmlStr += '<div class="panel panel-primary">';
+            htmlStr += '  <div class="panel-heading">';
+            htmlStr += '    <h3 class="panel-title">Star Ratings</h3>';
+            htmlStr += '  </div>';
+            htmlStr += '  <div class="panel-body">';
+            htmlStr += '    <table class="table">';
+            htmlStr += '      <tbody>';
+            htmlStr += '        <tr>';
+            htmlStr += '          <td><strong>Overall</strong></td><td>' + app.generateStarRating(vehicleDetails.OverallRating) + '</td>';
+            htmlStr += '        </tr>';
+            htmlStr += '        <tr>';
+            htmlStr += '          <td><strong>Front Crash</strong></td><td>' + app.generateStarRating(vehicleDetails.OverallFrontCrashRating) + '</td>';            
+            htmlStr += '        </tr>';
+            htmlStr += '        <tr>';
+            htmlStr += '          <td><strong>Side Crash</strong></td><td>' + app.generateStarRating(vehicleDetails.OverallSideCrashRating) + '</td>';            
+            htmlStr += '        </tr>';
+            htmlStr += '        <tr>';
+            htmlStr += '          <td><strong>Side Pole Crash</strong></td><td>' + app.generateStarRating(vehicleDetails.SidePoleCrashRating) + '</td>';
+            htmlStr += '        </tr>';
+            htmlStr += '        <tr>';
+            htmlStr += '          <td><strong>Rollover</strong></td><td>' + app.generateStarRating(vehicleDetails.RolloverRating) + '</td>';
+            htmlStr += '        </tr>';
+            htmlStr += '      </tbody>';
+            htmlStr += '    </table>';
+            htmlStr += '  </div>';
+            htmlStr += '</div>';
+
+            // Images
+
+            htmlStr += '<div class="panel panel-primary">';
+            htmlStr += '  <div class="panel-heading">';
+            htmlStr += '    <h3 class="panel-title">Crash Test Pictures</h3>';
+            htmlStr += '  </div>';
+            htmlStr += '  <div class="panel-body">';
+            if (vehicleDetails.FrontCrashPicture) {
+                htmlStr += '<img alt="Front Crash Image" class="img-responsive crash-image center-block" src="' + vehicleDetails.FrontCrashPicture + '">';
+            } else {
+                htmlStr += '<p class="text-center">Front crash image unavailable.</p>';
+            }
+
+            if (vehicleDetails.SideCrashPicture) {
+                htmlStr += '<img alt="Side Crash Image" class="img-responsive crash-image center-block" src="' + vehicleDetails.SideCrashPicture + '">';
+            } else {
+                htmlStr += '<p class="text-center">Side crash image unavailable.</p>';
+            }
+
+            if (vehicleDetails.SidePolePicture) {
+                htmlStr += '<img alt="Side Pole Crash Image" class="img-responsive crash-image center-block" src="' + vehicleDetails.SidePolePicture + '">';
+            } else {
+                htmlStr += '<p class="text-center">Side pole crash image unavailable.</p>';
+            }
+
+            htmlStr += '  </div>';
+            htmlStr += '</div>';
+            // Recalls
+            numRecalls = vehicleDetails.RecallsCount;
+
+            htmlStr += '<div class="panel ' + (numRecalls === 0 ? 'panel-primary' : 'panel-danger') + '">';
+            htmlStr += '  <div class="panel-heading">';
+            htmlStr += '    <h3 class="panel-title">Recalls</h3>';
+            htmlStr += '  </div>';
+            htmlStr += '  <div class="panel-body">';  
+
+            switch(numRecalls) {
+                case 0:
+                    htmlStr += '<p>There are no known recalls affecting this vehicle.</p>';
+                    break;
+                case 1:
+                    htmlStr += '<p>This vehicle is subject to 1 recall.</p>';
+                    break;
+                default:
+                    htmlStr += '<p>This vehicle is subject to ' + numRecalls + ' recalls.</p>';
+            }      
+
+            htmlStr += '  </div>';
+            htmlStr += '</div>';
+        }
+
+        $('#pageContent').html(htmlStr);
+    },
+
+    generateStarRating(numStars) {
+        var n = 0,
+            htmlStars = '';
+
+        if (numStars === 'Not Rated') {
+            return numStars;
+        }
+
+        for (; n < numStars; n++) {
+            htmlStars += '<i class="fa fa-star"></i>';
+        }
+
+        return htmlStars;
     },
 
     showGeneralError(errorMsg) {
