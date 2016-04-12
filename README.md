@@ -32,6 +32,10 @@ Sample Vehicles to try:
 
 Allow users to go back to the previous screen, or start over.
 
+##API Implementation Notes
+
+The government does not have CORS on for this API, but it works fine with JSONP.
+
 ##Data Items to Show for Each Vehicle
 
 (JSON field names in parentheses)
