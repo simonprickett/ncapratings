@@ -2,6 +2,15 @@
 
 NHTSA NCAP Car Safety Rating API Demo uses [NCAP Car Safety API](http://www.nhtsa.gov/webapi/Default.aspx?SafetyRatings/API/5#divAPISpecHeader).
 
+This is a really basic throwaway JQuery / Bootstrap demo to be used as a guide when constructing example apps in:
+
+* Ionic Framework
+* Titanium Appcelerator
+* React Native
+* React JS
+* NativeScript
+* Ext JS 6
+
 Screen flow:
 
 * Display list of model years that data is available  for [API call](http://www.nhtsa.gov/webapi/api/SafetyRatings?format=json)
