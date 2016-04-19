@@ -144,45 +144,68 @@ var app = {
 
         $('#pageContent').html(htmlStr);
         $('#vehicles li').click(function(e) {
-                app.onVehicleSelected($(this).attr('id'), modelYear, manufacturer);
+                app.onVehicleModelSelected($(this).attr('id'), modelYear, manufacturer);
         });
     },
 
-    onVehicleSelected: function(vehicle, modelYear, manufacturer) {
+    onVehicleModelSelected: function(vehicle, modelYear, manufacturer) {
         $.ajax({
             cache: false,
             dataType: 'jsonp',
             error: function(xhr, status, errorMsg) {
-                app.showGeneralError('Failed to load vehicle ' + vehicle + '!');
+                app.showGeneralError('Failed to load vehicle model ' + vehicle + '!');
             },
             jsonp: app.API_JSONP_CALLBACK,
+            manufacturer: manufacturer,
             method: 'GET',
-            success: app.onVehicleLoaded,
+            model: vehicle,
+            modelYear: modelYear,
+            success: app.onVehiclesLoaded,
             url: app.API_BASE_URL + 'modelyear/' + modelYear + '/make/' + manufacturer + '/model/' + vehicle + '?' + app.API_BASE_PARAMS
         });
     },
 
-    onVehicleLoaded: function(data, status) {
-        var vehicleId = '';
-
-        // Nothing to display yet as we have to use VehicleId from data
-        // to get details...
+    onVehiclesLoaded: function(data, status) {
+        var n = 0,
+            htmlStr = '',
+            vehicle;
 
         if (data && data.Results) {
-            vehicleId = data.Results[0].VehicleId;
+            htmlStr += ''
+                + '<div class="row">'
+                + '    <div class="col-md-12">'
+                + '        <h3>' + this.modelYear + ' ' + this.manufacturer + ' ' + this.model + '</h3>'
+                + '        <ul class="list-group" id="vehicles">';
 
-            $.ajax({
-                cache: false,
-                dataType: 'jsonp',
-                error: function(xhr, status, errorMsg) {
-                    app.showGeneralError('Failed to load vehicle details for ' + data.Results[0].VehicleDescription);
-                },
-                jsonp: app.API_JSONP_CALLBACK,
-                method: 'GET',
-                success: app.onVehicleDetailLoaded,
-                url: app.API_BASE_URL + 'VehicleId/' + vehicleId + '?' + app.API_BASE_PARAMS 
-            });
+            for (; n < data.Results.length; n++) {
+                vehicle = data.Results[n];
+                htmlStr += '            <li class="list-group-item" id="' + vehicle.VehicleId + '">' + vehicle.VehicleDescription + '</li>';
+            }
+
+            htmlStr = htmlStr
+                + '        </ul>'
+                + '    </div>'
+                + '</div>';
         }
+
+        $('#pageContent').html(htmlStr);
+        $('#vehicles li').click(function(e) {
+            app.onVehicleIdSelected($(this).attr('id'));
+        });
+    },
+
+    onVehicleIdSelected: function(vehicleId) {
+        $.ajax({
+            cache: false,
+            dataType: 'jsonp',
+            error: function(xhr, status, errorMsg) {
+                app.showGeneralError('Failed to load vehicle details for ' + data.Results[0].VehicleDescription);
+            },
+            jsonp: app.API_JSONP_CALLBACK,
+            method: 'GET',
+            success: app.onVehicleDetailLoaded,
+            url: app.API_BASE_URL + 'VehicleId/' + vehicleId + '?' + app.API_BASE_PARAMS 
+        });
     },
 
     onVehicleDetailLoaded: function(data, status) {
@@ -195,7 +218,7 @@ var app = {
 
             htmlStr += '<div class="row">';
             htmlStr += '  <div class="col-md-12">';
-            htmlStr += '    <h3>' + vehicleDetails.ModelYear + ' ' + vehicleDetails.Make + ' ' + vehicleDetails.Model + '</h3>';
+            htmlStr += '    <h3>' + vehicleDetails.VehicleDescription + '</h3>';
             htmlStr += '  </div>';
             htmlStr += '</div>';
 
