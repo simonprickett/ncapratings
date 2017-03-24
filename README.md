@@ -11,7 +11,7 @@ This is a really basic throwaway JQuery / Bootstrap demo to be used as a guide w
 * NativeScript
 * Ext JS 6
 
-##Working Demo
+## Working Demo
 
 A working demo can be seen [here](http://crudworks.org/ncap), note that this is best from a mobile user agent and that the Back and Restart buttons are not functional for the purposes of this demo.  These should be included in your implementation and made to work.
 
@@ -22,7 +22,7 @@ Sample Vehicles to try:
 * Some data missing, has recalls: 2009 Ford Explorer
 * No data, no recalls: 2015 BMW 228i XDrive
 
-##Screen Flow
+## Screen Flow
 
 * Display list of model years that data is available  for [API call](http://www.nhtsa.gov/webapi/api/SafetyRatings?format=json)
 * When user picks a model year display list of manufacturers for that yet [API call assuming 2015 selected](http://www.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015?format=json)
@@ -33,21 +33,21 @@ Sample Vehicles to try:
 
 Allow users to go back to the previous screen, or start over.
 
-##API Implementation Notes
+## API Implementation Notes
 
 The government does not have CORS on for this API, but it works fine with JSONP.
 
-##Data Items to Show for Each Vehicle
+## Data Items to Show for Each Vehicle
 
 (JSON field names in parentheses)
 
-###Vehicle Name:
+### Vehicle Name:
 
 * Model Year (ModelYear)
 * Manufacturer (Make)
 * Vehicle Model (Model)
 
-###Star Ratings:
+### Star Ratings:
 
 * Overall Rating (OverallRating)
 * Front Crash Rating (OverallFrontCrashRating)
@@ -57,7 +57,7 @@ The government does not have CORS on for this API, but it works fine with JSONP.
 
 If any of these are not present, the API returns "Not Rated" in place of 1-5.
 
-###Crash Images:
+### Crash Images:
 
 * Front Crash (FrontCrashPicture)
 * Side Crash (SideCrashPicture)
@@ -67,13 +67,13 @@ If any of these are not present, they will be undefined in the API - display tex
 
 "Side pole crash image unavailable."
 
-###Recalls:
+### Recalls:
 
 * Number of recalls (RecallsCount)
 
 Handle case where there are 0, 1, >1 recalls.  Use visual warning indication when >0 recalls.
 
-##Example data for 2015 BMW 335i XDrive GT
+## Example data for 2015 BMW 335i XDrive GT
 
 ```
 {
@@ -108,7 +108,7 @@ Handle case where there are 0, 1, >1 recalls.  Use visual warning indication whe
 }
 ```
 
-##Example Data with Additional Images and Video - 2016 BMW 328i
+## Example Data with Additional Images and Video - 2016 BMW 328i
 
 ```
 {
