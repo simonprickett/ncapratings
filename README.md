@@ -15,7 +15,7 @@ This is a really basic throwaway JQuery / Bootstrap demo to be used as a guide w
 
 ![demo](ncap.gif)
 
-A working demo can be seen [here](http://crudworks.org/ncap), note that this is best from a mobile user agent and that the Back and Restart buttons are not functional for the purposes of this demo.  These should be included in your implementation and made to work.
+A working demo can be seen [here](http://simonprickett.github.io/ncapratings/), note that this is best from a mobile user agent and that the Back and Restart buttons are not functional for the purposes of this demo.  These should be included in your implementation and made to work.
 
 Sample Vehicles to try:
 
