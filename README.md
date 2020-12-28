@@ -1,6 +1,6 @@
 # NCAP Ratings
 
-NHTSA NCAP Car Safety Rating API Demo uses [NCAP Car Safety API](http://www.nhtsa.gov/webapi/Default.aspx?SafetyRatings/API/5#divAPISpecHeader).
+NHTSA NCAP Car Safety Rating API Demo uses [NCAP Car Safety API](https://one.nhtsa.gov/webapi/Default.aspx?SafetyRatings/API/5#divAPISpecHeader).
 
 This is a really basic throwaway JQuery / Bootstrap demo to be used as a guide when constructing example apps in:
 
@@ -15,7 +15,7 @@ This is a really basic throwaway JQuery / Bootstrap demo to be used as a guide w
 
 ![demo](ncap.gif)
 
-A working demo can be seen [here](http://simonprickett.github.io/ncapratings/), note that this is best from a mobile user agent and that the Back and Restart buttons are not functional for the purposes of this demo.  These should be included in your implementation and made to work.
+A working demo can be seen [here](https://simonprickett.dev/ncapratings/), note that this is best from a mobile user agent and that the Back and Restart buttons are not functional for the purposes of this demo.  These should be included in your implementation and made to work.
 
 Sample Vehicles to try:
 
@@ -26,12 +26,12 @@ Sample Vehicles to try:
 
 ## Screen Flow
 
-* Display list of model years that data is available  for [API call](http://www.nhtsa.gov/webapi/api/SafetyRatings?format=json)
-* When user picks a model year display list of manufacturers for that yet [API call assuming 2015 selected](http://www.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015?format=json)
-* When user picks a manufacturer display list of model variants for that manufacturer/year [API call assuming 2015 and Audi selected](http://www.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi?format=json)
-* When user picks a model for the selected manufacturer/year, display list of variants for that model [API call assuming 2015 and Audi and A3 selected](http://www.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi/model/A3?format=json)
+* Display list of model years that data is available  for [API call](https://one.nhtsa.gov/webapi/api/SafetyRatings?format=json)
+* When user picks a model year display list of manufacturers for that yet [API call assuming 2015 selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015?format=json)
+* When user picks a manufacturer display list of model variants for that manufacturer/year [API call assuming 2015 and Audi selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi?format=json)
+* When user picks a model for the selected manufacturer/year, display list of variants for that model [API call assuming 2015 and Audi and A3 selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi/model/A3?format=json)
 * When user picks a variant, display actual data based on the vehicle's ID
-* To get actual crash test data for the 2015 Audi A3 4 DR AWD we need to use its vehicle ID 9403 [API call for vehicle 9403](http://www.nhtsa.gov/webapi/api/SafetyRatings/VehicleId/9403?format=json)
+* To get actual crash test data for the 2015 Audi A3 4 DR AWD we need to use its vehicle ID 9403 [API call for vehicle 9403](https://one.nhtsa.gov/webapi/api/SafetyRatings/VehicleId/9403?format=json)
 
 Allow users to go back to the previous screen, or start over.
 
@@ -77,7 +77,7 @@ Handle case where there are 0, 1, >1 recalls.  Use visual warning indication whe
 
 ## Example data for 2015 BMW 335i XDrive GT
 
-```
+```json
 {
   Count: 1,
   Message: "Results returned successfully",
@@ -112,7 +112,7 @@ Handle case where there are 0, 1, >1 recalls.  Use visual warning indication whe
 
 ## Example Data with Additional Images and Video - 2016 BMW 328i
 
-```
+```json
 {
   Count: 1,
   Message: "Results returned successfully",
