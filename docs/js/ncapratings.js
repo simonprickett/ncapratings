@@ -1,7 +1,7 @@
 /* ncapratings.js */
 
 var app = {
-    API_BASE_URL: 'http://www.nhtsa.gov/webapi/api/SafetyRatings/',
+    API_BASE_URL: 'https://one.nhtsa.gov/webapi/api/SafetyRatings',
     API_BASE_PARAMS: 'format=json',
     API_JSONP_CALLBACK: 'callback',
     selectedManufacturer: '',
@@ -111,7 +111,7 @@ var app = {
             jsonp: app.API_JSONP_CALLBACK,
             method: 'GET',
             success: app.onModelsLoaded,
-            url: app.API_BASE_URL + 'modelyear/' + modelYear + '/make/' + manufacturer + '?' + app.API_BASE_PARAMS
+            url: app.API_BASE_URL + '/modelyear/' + modelYear + '/make/' + manufacturer + '?' + app.API_BASE_PARAMS
         });
     },
 
@@ -161,7 +161,7 @@ var app = {
             model: vehicle,
             modelYear: modelYear,
             success: app.onVehiclesLoaded,
-            url: app.API_BASE_URL + 'modelyear/' + modelYear + '/make/' + manufacturer + '/model/' + vehicle + '?' + app.API_BASE_PARAMS
+            url: app.API_BASE_URL + '/modelyear/' + modelYear + '/make/' + manufacturer + '/model/' + vehicle + '?' + app.API_BASE_PARAMS
         });
     },
 
@@ -204,7 +204,7 @@ var app = {
             jsonp: app.API_JSONP_CALLBACK,
             method: 'GET',
             success: app.onVehicleDetailLoaded,
-            url: app.API_BASE_URL + 'VehicleId/' + vehicleId + '?' + app.API_BASE_PARAMS 
+            url: app.API_BASE_URL + '/vehicleId/' + vehicleId + '?' + app.API_BASE_PARAMS 
         });
     },
 
