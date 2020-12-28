@@ -26,12 +26,12 @@ Sample Vehicles to try:
 
 ## Screen Flow
 
-* Display list of model years that data is available  for [API call](https://one.nhtsa.gov/webapi/api/SafetyRatings?format=json)
-* When user picks a model year display list of manufacturers for that yet [API call assuming 2015 selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015?format=json)
-* When user picks a manufacturer display list of model variants for that manufacturer/year [API call assuming 2015 and Audi selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi?format=json)
-* When user picks a model for the selected manufacturer/year, display list of variants for that model [API call assuming 2015 and Audi and A3 selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi/model/A3?format=json)
+* Display list of model years that data is available  for ([API call](https://one.nhtsa.gov/webapi/api/SafetyRatings?format=json))
+* When user picks a model year display list of manufacturers for that yet ([API call assuming 2015 selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015?format=json))
+* When user picks a manufacturer display list of model variants for that manufacturer/year ([API call assuming 2015 and Audi selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi?format=json))
+* When user picks a model for the selected manufacturer/year, display list of variants for that model ([API call assuming 2015 and Audi and A3 selected](https://one.nhtsa.gov/webapi/api/SafetyRatings/modelyear/2015/make/Audi/model/A3?format=json))
 * When user picks a variant, display actual data based on the vehicle's ID
-* To get actual crash test data for the 2015 Audi A3 4 DR AWD we need to use its vehicle ID 9403 [API call for vehicle 9403](https://one.nhtsa.gov/webapi/api/SafetyRatings/VehicleId/9403?format=json)
+* To get actual crash test data for the 2015 Audi A3 4 DR AWD we need to use its vehicle ID 9403 ([API call for vehicle 9403](https://one.nhtsa.gov/webapi/api/SafetyRatings/VehicleId/9403?format=json))
 
 Allow users to go back to the previous screen, or start over.
 
